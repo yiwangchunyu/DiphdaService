@@ -7,7 +7,7 @@ python manage.py makemigrations
 yes|python manage.py makemigrations user
 yes|python manage.py makemigrations needs
 python manage.py migrate
-python manage.py collectstatic
+yes|python manage.py collectstatic
 
 rm /etc/nginx/sites-enabled/diphda.yiwangchunyu.wang.conf
 ln -s /data/app/DiphdaService/diphda.yiwangchunyu.wang.conf /etc/nginx/sites-enabled/diphda.yiwangchunyu.wang.conf
