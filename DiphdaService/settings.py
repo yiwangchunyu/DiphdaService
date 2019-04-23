@@ -9,11 +9,12 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
+import json
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CONFIG = json.load(open('config.json'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -87,11 +88,11 @@ WSGI_APPLICATION = 'DiphdaService.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'diphda',
-        'USER':'root',
-        'PASSWORD':'123456',
-        'HOST':'127.0.0.1',
-        'PORT':'3306',
+        'NAME': CONFIG['database']['name'],
+        'USER':CONFIG['database']['user'],
+        'PASSWORD':CONFIG['database']['password'],
+        'HOST':CONFIG['database']['host'],
+        'PORT':CONFIG['database']['port'],
     }
 }
 

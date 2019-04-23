@@ -6,3 +6,4 @@ media/*
 !media/system/*
 static
 **/migrations/*
+config.json
