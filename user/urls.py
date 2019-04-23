@@ -21,5 +21,8 @@ from user import views
 urlpatterns = [
     re_path(r'^create$', views.create),
     re_path(r'^login$', views.login),
+    re_path(r'^update', views.update),
+    re_path(r'^show', views.show),
+    re_path(r'^getOpenid', views.getOpenid),
     re_path(r'^getTags$', views.getTags),
 ]
