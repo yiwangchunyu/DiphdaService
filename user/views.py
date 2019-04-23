@@ -14,7 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from DiphdaService import settings
 from DiphdaService.settings import MEDIA_URL_PREFIX
-from user.models import User
+from user.models import User, Tag
 
 
 @csrf_exempt
@@ -94,5 +94,35 @@ def update(request):
         User.objects.update(**params)
     except:
         res = {'code': -3, 'msg': '更新失败-3', 'data': []}
+        traceback.print_exc()
+    return HttpResponse(json.dumps(res))
+
+@csrf_exempt
+def show(request):
+    res = {'code': 0, 'msg': 'success', 'data': []}
+    if not {'user_id'}.issubset(set(request.POST.keys())):
+        return HttpResponse(json.dumps({'code': -1, 'msg': 'unexpected params!', 'data': []}))
+    try:
+        qset = User.objects.filter(id=request.POST['user_id'])
+        if qset.count() == 1:
+            res['data'] = json.loads(serializers.serialize("json", qset))[0]['fields']
+            res['data']['id'] = json.loads(serializers.serialize("json", qset))[0]['pk']
+            res['data']['tags'] = json.loads(json.loads(serializers.serialize("json", qset))[0]['fields']['tags'])
+        else:
+            res = {'code': -2, 'msg': '用户不存在-2', 'data': []}
+    except:
+        res = {'code': -3, 'msg': '用户查找失败-3', 'data': []}
+        traceback.print_exc()
+    return HttpResponse(json.dumps(res))
+
+@csrf_exempt
+def getTags(request):
+    res = {'code': 0, 'msg': 'success', 'data': []}
+    try:
+        qset = Tag.objects.all()
+        for q in qset:
+            res['data'].append(q.name)
+    except:
+        res = {'code': -3, 'msg': '用户标签查找失败-3', 'data': []}
         traceback.print_exc()
     return HttpResponse(json.dumps(res))

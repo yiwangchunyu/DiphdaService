@@ -15,3 +15,9 @@ class User(models.Model):
     status = models.IntegerField(default=1)
     ctime = models.DateTimeField(default = timezone.now)
     mtime = models.DateTimeField(auto_now=True)
+
+class Tag(models.Model):
+    name = models.CharField(max_length=100)
+    status = models.IntegerField(default=1)
+    ctime = models.DateTimeField(default = timezone.now)
+    mtime = models.DateTimeField(auto_now=True)
