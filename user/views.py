@@ -14,6 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from DiphdaService import settings
 from DiphdaService.settings import MEDIA_URL_PREFIX
+from lib import client
 from user.models import User, Tag
 
 
@@ -125,4 +126,11 @@ def getTags(request):
     except:
         res = {'code': -3, 'msg': '用户标签查找失败-3', 'data': []}
         traceback.print_exc()
+    return HttpResponse(json.dumps(res))
+
+@csrf_exempt
+def getOpenid(request):
+    if not {'js_code'}.issubset(set(request.POST.keys())):
+        return HttpResponse(json.dumps({'code': -3, 'msg': 'unexpected params!', 'data': request.POST.dict()}))
+    res=client.getOpenid(request.POST['js_code'])
     return HttpResponse(json.dumps(res))
