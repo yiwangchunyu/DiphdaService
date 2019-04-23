@@ -14,7 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from DiphdaService import settings
 from DiphdaService.settings import MEDIA_URL_PREFIX
-from needs.models import Need
+from needs.models import Need, Tag
 
 
 @csrf_exempt
@@ -69,5 +69,17 @@ def show(request):
             res['data'].append(row)
     except:
         res = {'code': -3, 'msg': '需求查询失败-3', 'data': []}
+        traceback.print_exc()
+    return HttpResponse(json.dumps(res))
+
+@csrf_exempt
+def getTags(request):
+    res = {'code': 0, 'msg': 'success', 'data': []}
+    try:
+        qset = Tag.objects.all()
+        for q in qset:
+            res['data'].append(q.name)
+    except:
+        res = {'code': -3, 'msg': '需求标签查找失败-3', 'data': []}
         traceback.print_exc()
     return HttpResponse(json.dumps(res))
