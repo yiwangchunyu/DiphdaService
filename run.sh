@@ -3,10 +3,10 @@ set -v
 git checkout .
 git checkout master
 git pull origin master
-python manage.py makemigrations
-yes|python manage.py makemigrations user
-yes|python manage.py makemigrations needs
-python manage.py migrate
+#python manage.py makemigrations
+#yes|python manage.py makemigrations user
+#yes|python manage.py makemigrations needs
+#python manage.py migrate
 yes|python manage.py collectstatic
 
 rm /etc/nginx/sites-enabled/diphda.yiwangchunyu.wang.conf
