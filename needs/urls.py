@@ -24,4 +24,5 @@ urlpatterns = [
     re_path(r'^delete', views.show),
     re_path(r'^show', views.show),
     re_path(r'^getTags$', views.getTags),
+    re_path(r'^getCategories$', views.getCategories),
 ]
