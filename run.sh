@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
+set -v
 git checkout .
 git checkout master
 git pull origin master
 python manage.py makemigrations
-python manage.py makemigrations -y user
-python manage.py makemigrations -y needs
+yes|python manage.py makemigrations user
+yes|python manage.py makemigrations needs
 python manage.py migrate
 python manage.py collectstatic
 
