@@ -63,6 +63,7 @@ def show(request):
     res={'code':0, 'msg':'success', 'data':[]}
     try:
         params=request.POST.dict()
+        params['status']=1
         qset=Need.objects.filter(**params).order_by('-ctime')
         for r in json.loads(serializers.serialize('json',qset)):
             row=r['fields']
