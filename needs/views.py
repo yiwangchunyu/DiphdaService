@@ -14,7 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from DiphdaService import settings
 from DiphdaService.settings import MEDIA_URL_PREFIX
-from needs.models import Need, Tag, Category
+from needs.models import Need, Tag, Category, NEED_STATUS_MAP
 from user.models import User
 
 
@@ -71,6 +71,8 @@ def show(request):
             qqset=User.objects.filter(id=user_id)
             row['user_info'] = json.loads(serializers.serialize('json',qqset))[0]['fields']
             row['need_id']=r['pk']
+            row['tags']=json.loads(row['tags'])
+            row['need_status']=NEED_STATUS_MAP[row['need_status']]
             res['data'].append(row)
     except:
         res = {'code': -3, 'msg': '需求查询失败-3', 'data': []}
