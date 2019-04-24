@@ -20,7 +20,7 @@ class NeedAdmin(admin.ModelAdmin):
     # ordering = ('id',)
 
     # list_editable 设置默认可编辑字段
-    list_editable = []
+    list_editable = ['status','content','need_status']
 
     # 设置哪些字段可以点击进入编辑界面
     # list_display_links = ('id', 'caption')
