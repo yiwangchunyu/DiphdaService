@@ -50,7 +50,7 @@ def create(request):
 @csrf_exempt
 def login(request):
     res = {'code': 0, 'msg': 'success', 'data': []}
-    if not {'openid','username','avatar'}.issubset(set(request.POST.keys())):
+    if not {'openid','username','avatar','gender',}.issubset(set(request.POST.keys())):
         return HttpResponse(json.dumps({'code': -1, 'msg': 'unexpected params!', 'data': []}))
     try:
         qset=User.objects.filter(openid=request.POST['openid'])

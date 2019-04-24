@@ -6,7 +6,7 @@ from user.models import User, Tag
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     # listdisplay设置要显示在列表中的字段（id字段是Django模型的默认主键）
-    list_display = ('id', 'openid', 'username', 'avatar', 'tags','status','ctime','mtime')
+    list_display = ('id', 'openid', 'username', 'gender','avatar', 'tags','status','ctime','mtime')
 
     #搜索字段
     search_fields = ('id', 'openid', 'username','tags', 'ctime')
