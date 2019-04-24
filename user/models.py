@@ -10,6 +10,7 @@ from django.utils import timezone
 class User(models.Model):
     openid = models.CharField(max_length=100,unique=True)
     username = models.CharField(max_length=100,default='')
+    gender = models.IntegerField(default=1)
     avatar = models.CharField(max_length=200,default='')
     tags = models.TextField(default=json.dumps([]))
     status = models.IntegerField(default=1)

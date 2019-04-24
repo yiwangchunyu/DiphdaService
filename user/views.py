@@ -50,7 +50,7 @@ def create(request):
 @csrf_exempt
 def login(request):
     res = {'code': 0, 'msg': 'success', 'data': []}
-    if not {'openid'}.issubset(set(request.POST.keys())):
+    if not {'openid','username','avatar','gender',}.issubset(set(request.POST.keys())):
         return HttpResponse(json.dumps({'code': -1, 'msg': 'unexpected params!', 'data': []}))
     try:
         qset=User.objects.filter(openid=request.POST['openid'])
@@ -58,6 +58,30 @@ def login(request):
             res['data']=json.loads(serializers.serialize("json", qset))[0]['fields']
             res['data']['id']=json.loads(serializers.serialize("json", qset))[0]['pk']
             res['data']['tags']=json.loads(json.loads(serializers.serialize("json", qset))[0]['fields']['tags'])
+        elif qset.count()==0:
+            user = User.objects.create(**request.POST.dict())
+
+            # 保存头像
+            r = requests.get(user.avatar)
+            date = time.strftime('%Y%m%d', time.localtime())
+            dirs = settings.MEDIA_ROOT + '/avatar/' + date + '/'
+            url_mid = '/media/avatar/' + date + '/'
+            fname = 'avatar_' + str(user.id) + '_' + str(int(round(time.time() * 1000))) + '.jpg'
+            folder = os.path.exists(dirs)
+            if not folder:  # 判断是否存在文件夹如果不存在则创建为文件夹
+                os.makedirs(dirs)
+            with open(dirs + fname, "wb") as code:
+                code.write(r.content)
+
+            # 头像url入库
+            user.avatar = MEDIA_URL_PREFIX + url_mid + fname
+            user.save()
+
+            qset = User.objects.filter(openid=request.POST['openid'])
+            res['data'] = json.loads(serializers.serialize("json", qset))[0]['fields']
+            res['data']['id'] = json.loads(serializers.serialize("json", qset))[0]['pk']
+            res['data']['tags'] = json.loads(json.loads(serializers.serialize("json", qset))[0]['fields']['tags'])
+
         else:
             res={'code':-2, 'msg':'登录失败-2','data':[]}
 
