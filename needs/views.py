@@ -15,6 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 from DiphdaService import settings
 from DiphdaService.settings import MEDIA_URL_PREFIX
 from needs.models import Need, Tag, Category
+from user.models import User
 
 
 @csrf_exempt
@@ -65,6 +66,10 @@ def show(request):
         qset=Need.objects.filter(**params).order_by('-ctime')
         for r in json.loads(serializers.serialize('json',qset)):
             row=r['fields']
+            user_id=row['user_id']
+            row.pop('user_id')
+            qqset=User.objects.filter(id=user_id)
+            row['user_info'] = json.loads(serializers.serialize('json',qqset))[0]['fields']
             row['need_id']=r['pk']
             res['data'].append(row)
     except:
