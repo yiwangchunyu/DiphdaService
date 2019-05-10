@@ -184,6 +184,8 @@ def orderUpdate(request):
         need_id=params['need_id']
         params.pop('need_id')
         Order.objects.filter(need_id=need_id,status=1).update(**params)
+        if 'content' in params:
+            Need.objects.filter(id=need_id,status=1).update(need_status=3)
     except:
         res = {'code': -3, 'msg': '更新失败-3', 'data': []}
         traceback.print_exc()
