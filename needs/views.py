@@ -179,7 +179,7 @@ def updateOrder(request):
     if  not {'need_id'}.issubset(set(request.POST.keys())):
         return HttpResponse(json.dumps({'code':-1,'msg':'unexpected params!', 'data':[]}))
     try:
-        params=request.POST
+        params=request.POST.dict().copy()
         need_id=params['need_id']
         params.pop('need_id')
         Need.objects.filter(need_id=need_id,status=1).update(**params)
