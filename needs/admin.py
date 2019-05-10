@@ -68,7 +68,7 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     # listdisplay设置要显示在列表中的字段（id字段是Django模型的默认主键）
-    list_display = ('id', 'user_id','need_id','order_status','status','ctime','mtime')
+    list_display = ('id', 'user_id','need_id','content','order_status','status','ctime','mtime')
 
     #搜索字段
     search_fields = ('id', 'user_id','need_id')

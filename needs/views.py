@@ -173,16 +173,17 @@ def cancelOrder(request):
     return HttpResponse(json.dumps(res))
 
 @csrf_exempt
-def updateOrder(request):
-    # print(request.POST.keys())
+def orderUpdate(request):
+    print(request.POST.keys())
     res = {'code': 0, 'msg': 'success', 'data': []}
     if  not {'need_id'}.issubset(set(request.POST.keys())):
         return HttpResponse(json.dumps({'code':-1,'msg':'unexpected params!', 'data':[]}))
     try:
-        params=request.POST.dict().copy()
+        params=request.POST.dict()
+        print(type(params),params)
         need_id=params['need_id']
         params.pop('need_id')
-        Need.objects.filter(need_id=need_id,status=1).update(**params)
+        Order.objects.filter(need_id=need_id,status=1).update(**params)
     except:
         res = {'code': -3, 'msg': '更新失败-3', 'data': []}
         traceback.print_exc()
