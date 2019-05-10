@@ -10,7 +10,7 @@ from django.db import models
 from django.utils import timezone
 
 
-NEED_STATUS_MAP={0:'已终止',1:'需求中',2:'已被抢',3:'已成单'}
+NEED_STATUS_MAP={0:'已终止',1:'需求中',2:'已被抢',3:'已解答',4:'已成单'}
 
 class Need(models.Model):
     user_id = models.IntegerField()
