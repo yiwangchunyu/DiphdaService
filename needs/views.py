@@ -73,8 +73,8 @@ def show(request):
             row['user_info'] = json.loads(serializers.serialize('json',qqset))[0]['fields']
             row['need_id']=r['pk']
             row['tags']=json.loads(row['tags'])
-            row['need_status']=NEED_STATUS_MAP[row['need_status']]
             row['need_stat'] = row['need_status']
+            row['need_status']=NEED_STATUS_MAP[row['need_status']]
             res['data'].append(row)
     except:
         res = {'code': -3, 'msg': '需求查询失败-3', 'data': []}
@@ -145,8 +145,8 @@ def listOrder(request):
             row['user_info'] = json.loads(serializers.serialize('json',qqset))[0]['fields']
             row['need_id']=r['pk']
             row['tags']=json.loads(row['tags'])
-            row['need_status']=NEED_STATUS_MAP[row['need_status']]
             row['need_stat'] = row['need_status']
+            row['need_status']=NEED_STATUS_MAP[row['need_status']]
             res['data'].append(row)
 
     except:
