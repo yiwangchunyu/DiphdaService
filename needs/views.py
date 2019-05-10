@@ -134,7 +134,7 @@ def listOrder(request):
     if  not {'user_id'}.issubset(set(request.POST.keys())):
         return HttpResponse(json.dumps({'code':-1,'msg':'unexpected params!', 'data':[]}))
     try:
-        qset=Order.objects.filter(user_id=request.POST['user_id'])
+        qset=Order.objects.filter(user_id=request.POST['user_id'],status=1)
         need_ids=[q.need_id for q in qset]
         qset=Need.objects.filter(id__in=need_ids)
         for r in json.loads(serializers.serialize('json',qset)):
@@ -151,6 +151,53 @@ def listOrder(request):
 
     except:
         res = {'code': -2, 'msg': '需求查询失败-2', 'data': []}
+        traceback.print_exc()
+    return HttpResponse(json.dumps(res))
+
+@csrf_exempt
+def cancelOrder(request):
+    # print(request.POST.keys())
+    res = {'code': 0, 'msg': 'success', 'data': []}
+    if  not {'need_id'}.issubset(set(request.POST.keys())):
+        return HttpResponse(json.dumps({'code':-1,'msg':'unexpected params!', 'data':[]}))
+    try:
+        order=Order.objects.get(status=1,need_id=request.POST['need_id'])
+        order.status=0
+        order.save()
+        need=Need.objects.get(status=1,id=request.POST['need_id'])
+        need.need_status=1
+        need.save()
+    except:
+        res = {'code': -2, 'msg': '删除失败-2', 'data': []}
+        traceback.print_exc()
+    return HttpResponse(json.dumps(res))
+
+@csrf_exempt
+def updateOrder(request):
+    # print(request.POST.keys())
+    res = {'code': 0, 'msg': 'success', 'data': []}
+    if  not {'need_id'}.issubset(set(request.POST.keys())):
+        return HttpResponse(json.dumps({'code':-1,'msg':'unexpected params!', 'data':[]}))
+    try:
+        params=request.POST
+        need_id=params['need_id']
+        params.pop('need_id')
+        Need.objects.filter(need_id=need_id,status=1).update(**params)
+    except:
+        res = {'code': -3, 'msg': '更新失败-3', 'data': []}
+        traceback.print_exc()
+    return HttpResponse(json.dumps(res))
+
+@csrf_exempt
+def orderDetail(request):
+    res = {'code': 0, 'msg': 'success', 'data': {}}
+    if  not {'need_id'}.issubset(set(request.POST.keys())):
+        return HttpResponse(json.dumps({'code':-1,'msg':'unexpected params!', 'data':[]}))
+    try:
+        order = Order.objects.get(status=1, need_id=request.POST['need_id'])
+        res['data']=json.loads(serializers.serialize('json',Order.objects.filter(status=1, need_id=request.POST['need_id'])))[0]['fields']
+    except:
+        res = {'code': -2, 'msg': '查询失败-2', 'data': []}
         traceback.print_exc()
     return HttpResponse(json.dumps(res))
 

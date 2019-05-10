@@ -43,6 +43,7 @@ class Category(models.Model):
 class Order(models.Model):
     user_id = models.IntegerField()
     need_id = models.IntegerField()
+    content = models.TextField(default='',blank=True,null=True)
     order_status = models.IntegerField(default=1,blank=True,null=True)
     status = models.IntegerField(default=1)
     ctime = models.DateTimeField(default = timezone.now)
