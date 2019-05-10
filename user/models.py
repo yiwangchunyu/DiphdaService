@@ -13,6 +13,7 @@ class User(models.Model):
     gender = models.IntegerField(default=1)
     avatar = models.CharField(max_length=200,default='')
     tags = models.TextField(default=json.dumps([]))
+    level = models.IntegerField(default=0)
     status = models.IntegerField(default=1)
     ctime = models.DateTimeField(default = timezone.now)
     mtime = models.DateTimeField(auto_now=True)

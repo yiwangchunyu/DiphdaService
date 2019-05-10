@@ -14,7 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from DiphdaService import settings
 from DiphdaService.settings import MEDIA_URL_PREFIX
-from needs.models import Need, Tag, Category, NEED_STATUS_MAP
+from needs.models import Need, Tag, Category, NEED_STATUS_MAP, Order
 from user.models import User
 
 
@@ -103,3 +103,52 @@ def getCategories(request):
         res = {'code': -3, 'msg': '需求类别查找失败-3', 'data': []}
         traceback.print_exc()
     return HttpResponse(json.dumps(res))
+
+@csrf_exempt
+def createOrder(request):
+    res = {'code': 0, 'msg': 'success', 'data': []}
+    if  not {'user_id','need_id'}.issubset(set(request.POST.keys())):
+        return HttpResponse(json.dumps({'code':-1,'msg':'unexpected params!', 'data':[]}))
+    try:
+        need=Need.objects.get(id=request.POST['need_id'])
+        #订单可以被抢单
+        if need.need_status==1:
+            if need.user_id==request.POST['user_id']:
+                res = {'code': -4, 'msg': '这是您自己的订单哦', 'data': []}
+            else:
+                Order.objects.create(need_id=request.POST['need_id'], user_id=request.POST['user_id'])
+                need.need_status=2
+                need.save()
+                res = {'code': 0, 'msg': 'success', 'data': []}
+        else:
+            res = {'code': -3, 'msg': '此订单已被其他人抢单啦', 'data': []}
+    except:
+        res = {'code': -2, 'msg': '需求查询失败-2', 'data': []}
+        traceback.print_exc()
+    return HttpResponse(json.dumps(res))
+
+@csrf_exempt
+def listOrder(request):
+    res = {'code': 0, 'msg': 'success', 'data': []}
+    if  not {'user_id'}.issubset(set(request.POST.keys())):
+        return HttpResponse(json.dumps({'code':-1,'msg':'unexpected params!', 'data':[]}))
+    try:
+        qset=Order.objects.filter(user_id=request.POST['user_id'])
+        need_ids=[q.need_id for q in qset]
+        qset=Need.objects.filter(id__in=need_ids)
+        for r in json.loads(serializers.serialize('json',qset)):
+            row=r['fields']
+            user_id=row['user_id']
+            row.pop('user_id')
+            qqset=User.objects.filter(id=user_id)
+            row['user_info'] = json.loads(serializers.serialize('json',qqset))[0]['fields']
+            row['need_id']=r['pk']
+            row['tags']=json.loads(row['tags'])
+            row['need_status']=NEED_STATUS_MAP[row['need_status']]
+            res['data'].append(row)
+
+    except:
+        res = {'code': -2, 'msg': '需求查询失败-2', 'data': []}
+        traceback.print_exc()
+    return HttpResponse(json.dumps(res))
+

@@ -10,7 +10,8 @@ from django.db import models
 from django.utils import timezone
 
 
-NEED_STATUS_MAP={0:'已终止',1:'需求中',2:'竞标中',3:'已成单'}
+NEED_STATUS_MAP={0:'已终止',1:'需求中',2:'已被抢',3:'已成单'}
+
 class Need(models.Model):
     user_id = models.IntegerField()
     level = models.IntegerField(default=1)
@@ -39,3 +40,10 @@ class Category(models.Model):
     ctime = models.DateTimeField(default = timezone.now)
     mtime = models.DateTimeField(auto_now=True)
 
+class Order(models.Model):
+    user_id = models.IntegerField()
+    need_id = models.IntegerField()
+    order_status = models.IntegerField(default=1,blank=True,null=True)
+    status = models.IntegerField(default=1)
+    ctime = models.DateTimeField(default = timezone.now)
+    mtime = models.DateTimeField(auto_now=True)

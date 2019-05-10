@@ -25,4 +25,6 @@ urlpatterns = [
     re_path(r'^show', views.show),
     re_path(r'^getTags$', views.getTags),
     re_path(r'^getCategories$', views.getCategories),
+    re_path(r'^listOrder$',views.listOrder),
+    re_path(r'^createOrder$',views.createOrder),
 ]
