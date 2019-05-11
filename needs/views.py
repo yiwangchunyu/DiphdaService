@@ -204,3 +204,20 @@ def orderDetail(request):
         traceback.print_exc()
     return HttpResponse(json.dumps(res))
 
+@csrf_exempt
+def orderConfirm(request):
+    res = {'code': 0, 'msg': 'success', 'data': {}}
+    if  not {'need_id'}.issubset(set(request.POST.keys())):
+        return HttpResponse(json.dumps({'code':-1,'msg':'unexpected params!', 'data':[]}))
+    try:
+        order = Order.objects.get(status=1, need_id=request.POST['need_id'])
+        order.status = 4
+        order.save()
+        need = Need.objects.get(status=1, id=request.POST['need_id'])
+        need.need_status = 4
+        need.save()
+    except:
+        res = {'code': -2, 'msg': '查询失败-2', 'data': []}
+        traceback.print_exc()
+    return HttpResponse(json.dumps(res))
+
