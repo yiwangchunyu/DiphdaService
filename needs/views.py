@@ -227,7 +227,7 @@ def orderConfirm(request):
         return HttpResponse(json.dumps({'code':-1,'msg':'unexpected params!', 'data':[]}))
     try:
         order = Order.objects.get(status=1, need_id=request.POST['need_id'])
-        order.status = 4
+        order.order_status = 4
         order.save()
         need = Need.objects.get(status=1, id=request.POST['need_id'])
         need.need_status = 4
