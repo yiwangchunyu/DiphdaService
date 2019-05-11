@@ -30,4 +30,6 @@ urlpatterns = [
     re_path(r'^cancelOrder$',views.cancelOrder),
     re_path(r'^orderUpdate$',views.orderUpdate),
     re_path(r'^orderDetail$',views.orderDetail),
+    re_path(r'^orderConfirm$',views.orderConfirm),
+    re_path(r'^orderCancelByPublisher$',views.orderCancelByPublisher),
 ]

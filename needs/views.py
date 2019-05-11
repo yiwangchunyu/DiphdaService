@@ -173,6 +173,22 @@ def cancelOrder(request):
     return HttpResponse(json.dumps(res))
 
 @csrf_exempt
+def orderCancelByPublisher(request):
+    # print(request.POST.keys())
+    res = {'code': 0, 'msg': 'success', 'data': []}
+    if  not {'need_id'}.issubset(set(request.POST.keys())):
+        return HttpResponse(json.dumps({'code':-1,'msg':'unexpected params!', 'data':[]}))
+    try:
+        Order.objects.filter(status=1,need_id=request.POST['need_id']).update(order_status=0)
+        need=Need.objects.get(status=1,id=request.POST['need_id'])
+        need.need_status=0
+        need.save()
+    except:
+        res = {'code': -2, 'msg': '删除失败-2', 'data': []}
+        traceback.print_exc()
+    return HttpResponse(json.dumps(res))
+
+@csrf_exempt
 def orderUpdate(request):
     print(request.POST.keys())
     res = {'code': 0, 'msg': 'success', 'data': []}
@@ -199,6 +215,23 @@ def orderDetail(request):
     try:
         order = Order.objects.get(status=1, need_id=request.POST['need_id'])
         res['data']=json.loads(serializers.serialize('json',Order.objects.filter(status=1, need_id=request.POST['need_id'])))[0]['fields']
+    except:
+        res = {'code': -2, 'msg': '查询失败-2', 'data': []}
+        traceback.print_exc()
+    return HttpResponse(json.dumps(res))
+
+@csrf_exempt
+def orderConfirm(request):
+    res = {'code': 0, 'msg': 'success', 'data': {}}
+    if  not {'need_id'}.issubset(set(request.POST.keys())):
+        return HttpResponse(json.dumps({'code':-1,'msg':'unexpected params!', 'data':[]}))
+    try:
+        order = Order.objects.get(status=1, need_id=request.POST['need_id'])
+        order.status = 4
+        order.save()
+        need = Need.objects.get(status=1, id=request.POST['need_id'])
+        need.need_status = 4
+        need.save()
     except:
         res = {'code': -2, 'msg': '查询失败-2', 'data': []}
         traceback.print_exc()
