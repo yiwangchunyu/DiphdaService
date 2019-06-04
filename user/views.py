@@ -116,7 +116,7 @@ def update(request):
             # 头像url入库
             params['avatar']=MEDIA_URL_PREFIX + url_mid + fname
 
-        User.objects.update(**params)
+        User.objects.filter(id=user_id).update(**params)
     except:
         res = {'code': -3, 'msg': '更新失败-3', 'data': []}
         traceback.print_exc()
