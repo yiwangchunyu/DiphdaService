@@ -14,6 +14,8 @@ class User(models.Model):
     avatar = models.CharField(max_length=200,default='')
     tags = models.TextField(default=json.dumps([]))
     level = models.IntegerField(default=0)
+    contact_type = models.CharField(max_length=100,default='',blank=True,null=True)
+    contact = models.CharField(max_length=100,default='', blank=True, null=True)
     status = models.IntegerField(default=1)
     ctime = models.DateTimeField(default = timezone.now)
     mtime = models.DateTimeField(auto_now=True)
