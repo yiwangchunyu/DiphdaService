@@ -96,7 +96,7 @@ def update(request):
     if not {'user_id'}.issubset(set(request.POST.keys())):
         return HttpResponse(json.dumps({'code': -1, 'msg': 'unexpected params!', 'data': []}))
     try:
-        params = request.POST
+        params = request.POST.dict().copy()
         user_id = params['user_id']
         params.pop('user_id')
 
