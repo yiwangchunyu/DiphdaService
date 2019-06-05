@@ -232,6 +232,9 @@ def orderConfirm(request):
         need = Need.objects.get(status=1, id=request.POST['need_id'])
         need.need_status = 4
         need.save()
+        r = requests.post("https://diphda.yiwangchunyu.wang/service/userext/addExpc",data={'user_id':order.user_id,'expc':need.quote*2})
+        # r = requests.post("http://127.0.0.1:8000/service/userext/addExpc",data={'user_id':order.user_id,'expc':need.quote*2})
+        print('addExpc|need_id='+str(need.id)+'|'+r.text)
     except:
         res = {'code': -2, 'msg': '查询失败-2', 'data': []}
         traceback.print_exc()
