@@ -24,5 +24,6 @@ urlpatterns = [
     re_path(r'^hello$', views.hello),
     re_path(r'^upload/', include('upload.urls')),
     re_path(r'^user/', include('user.urls')),
+    re_path(r'^userext/', include('userext.urls')),
     re_path(r'^needs/', include('needs.urls')),
 ]
