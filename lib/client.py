@@ -7,7 +7,7 @@ from DiphdaService.settings import CONFIG
 
 def getOpenid(code):
     data={
-        'appid':'wx8b0638d0d785d5b9',
+        'appid':'wx6d11ad308fa3283b',
         'secret':CONFIG['secret'],
         'grant_type':'authorization_code',
         'js_code':code
